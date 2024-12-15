@@ -30,10 +30,35 @@ class _PaymentVerificationScreenState extends State<PaymentVerificationScreen> {
             },
           );
         }),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.0),
-            child: Icon(Icons.notifications),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Stack(
+              children: [
+                const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.black,
+                  size: 30,
+                ),
+                Positioned(
+                  top: size.height * 0.001,
+                  right: size.width * 0.008,
+                  child: Container(
+                    height: size.height * 0.015,
+                    width: size.width * 0.033,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(7.5),
+                        color: const Color(0xFFDBE4FF)),
+                    child: Center(
+                        child: Text(
+                          '3',
+                          style:
+                          TextStyle(fontSize: size.width * 0.023, fontWeight: FontWeight.bold, color: const Color(0xFF0F3CC9)),
+                        )),
+                  ),
+                )
+              ],
+            ),
           )
         ],
         centerTitle: true,

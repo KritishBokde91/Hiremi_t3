@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hiremi_t3/widgets/custom_drawer.dart';
 import 'package:hiremi_t3/widgets/custombottombar.dart';
+import 'package:hiremi_t3/widgets/gradient_progress_bar.dart';
 
 import '../widgets/gradient_text.dart';
 
@@ -12,112 +14,128 @@ class ProfileVerificationScreen extends StatefulWidget {
       _ProfileVerificationScreenState();
 }
 
-class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
+class _ProfileVerificationScreenState extends State<ProfileVerificationScreen>
+    with SingleTickerProviderStateMixin {
   late int realIndex;
+  late bool isAnimate = false;
+  late AnimationController _controller;
+  late Animation<double> animation;
   @override
   void initState() {
     super.initState();
     realIndex = widget.currentIndex;
+    isAnimate = true;
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    );
+
+    animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Text(
           'Profile Verification',
           style: TextStyle(fontSize: 18),
         ),
-        leading: Builder(builder: (context) {
-          return IconButton(
-            icon: Image.asset('assets/images/menu_icon.png'),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          );
-        }),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.0),
-            child: Icon(Icons.notifications),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Stack(
+              children: [
+                const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.black,
+                  size: 30,
+                ),
+                Positioned(
+                  top: size.height * 0.001,
+                  right: size.width * 0.008,
+                  child: Container(
+                    height: size.height * 0.015,
+                    width: size.width * 0.033,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(7.5),
+                        color: const Color(0xFFDBE4FF)),
+                    child: Center(
+                        child: Text(
+                          '3',
+                          style:
+                          TextStyle(fontSize: size.width * 0.023, fontWeight: FontWeight.bold, color: const Color(0xFF0F3CC9)),
+                        )),
+                  ),
+                )
+              ],
+            ),
           )
         ],
-        centerTitle: true,
-      ),
-      drawer: const Drawer(
-        backgroundColor: Colors.white,
-        child: Center(
-          child: Text('Drawer'),
-        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/images/profile_verification_icon.png'),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            const GradientText('Verification in Progress',
-                gradient: LinearGradient(colors: [
+            SizedBox(height: size.height * 0.02),
+            const GradientText(
+              'Verification in Progress',
+              gradient: LinearGradient(
+                colors: [
                   Color(0xFF163EC8),
                   Color(0xFF0870FF),
                   Color(0xFF378EFF),
                   Color(0xFF89C1FF),
-                ]),
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            RichText(
-                textAlign: TextAlign.center,
-                text: const TextSpan(
-                    text:
-                        'Our team is currently verifying your profile, and this\n',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF163EC8)),
-                    children: [
-                      TextSpan(
-                          text:
-                              'process typically takes between 12 to 36 hours.')
-                    ])),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            RichText(
-                textAlign: TextAlign.center,
-                text: const TextSpan(
-                    text:
-                        "Once the verification is complete, you'll have full\n",
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF163EC8)),
-                    children: [TextSpan(text: 'access to the application')])),
-            SizedBox(
-              height: size.height * 0.04,
-            ),
-            Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                ],
               ),
-              width: size.width * 0.7,
-              child: Divider(
-                thickness: 22,
-                color: Colors.grey[300],
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: size.height * 0.02),
+            RichText(
+              textAlign: TextAlign.center,
+              text: const TextSpan(
+                text: 'Our team is currently verifying your profile, and this\n',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF163EC8)),
+                children: [
+                  TextSpan(
+                    text: 'process typically takes between 12 to 36 hours.',
+                  )
+                ],
               ),
             ),
-            Image.asset('assets/images/profile_verification_icon2.png')
+            SizedBox(height: size.height * 0.04),
+            const GradientProgressBar(),
+            SizedBox(height: size.height * 0.02),
+            Image.asset('assets/images/profile_verification_icon2.png'),
           ],
         ),
       ),
       bottomNavigationBar: Custombottombar(
-          currentIndex: realIndex,
-          onTabSelected: (index) => setState(() {
-                realIndex = index;
-              })),
+        currentIndex: realIndex,
+        onTabSelected: (index) => setState(() {
+          realIndex = index;
+        }),
+      ),
     );
   }
 }
