@@ -171,7 +171,7 @@ class _CustomFormWidgetState extends State<CustomFormWidget1> {
             const Padding(
               padding: EdgeInsets.only(top: 25.0),
               child: Text(
-                ' Required fields are incomplete.\n Fill them out to move forward. ',
+                ' Required fields are incomplete.\nFill them out to move forward. ',
                 style: TextStyle(
                     color: Color(0xffC90F0F),
                     fontSize: 14,
